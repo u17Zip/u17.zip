@@ -1,1 +1,522 @@
-file:///C:/Users/a-rus/Downloads/portfolio.html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U17.ZIP - AI Visual Content Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .desktop-view {
+            background: linear-gradient(180deg, #f5f5f7 0%, #e8e8eb 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .desktop-header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1d1d1f;
+        }
+
+        .desktop-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .desktop-header p {
+            font-size: 16px;
+            color: #86868b;
+        }
+
+        .folders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .folder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .folder:hover {
+            transform: scale(1.15);
+        }
+
+        .folder-icon {
+            width: 160px;
+            height: 140px;
+            border-radius: 20px 20px 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .folder-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .folder-1 .folder-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .folder-2 .folder-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .folder-3 .folder-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .folder-name {
+            font-size: 14px;
+            color: #1d1d1f;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .card h2 {
+            color: #1d1d1f;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: #6f6f77;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .card a:hover {
+            color: #764ba2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #f5f5f7;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .close-btn {
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .modal-description {
+            color: #6f6f77;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            padding: 20px;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .lightbox .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .folders-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 20px;
+            }
+
+            .folder-icon {
+                width: 120px;
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .modal-header {
+                padding: 20px;
+            }
+
+            .modal-header h2 {
+                font-size: 20px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="desktop-view">
+            <div class="desktop-header">
+                <h1>🎨 U17.ZIP</h1>
+                <p>Visual Content Creator with AI</p>
+            </div>
+
+            <div class="folders-grid">
+                <div class="folder folder-1" onclick="openProject('creativity')">
+                    <div class="folder-icon">📁</div>
+                    <div class="folder-name">Творчество</div>
+                </div>
+
+                <div class="folder folder-2" onclick="openProject('irnby')">
+                    <div class="folder-icon">📁</div>
+                    <div class="folder-name">IRNBY</div>
+                </div>
+
+                <div class="folder folder-3" onclick="openProject('clips')">
+                    <div class="folder-icon">📁</div>
+                    <div class="folder-name">Клипы</div>
+                </div>
+            </div>
+
+            <div class="info-cards">
+                <div class="card">
+                    <h2>👤 Обо мне</h2>
+                    <p><strong>Руслан "U17.ZIP"</strong></p>
+                    <p>Visual Content Creator с опытом в создании уникального контента с помощью AI. Специализируюсь на творческих решениях для брендов.</p>
+                    <p><strong>Instagram:</strong> <a href="https://instagram.com/u17.zip" target="_blank">@U17.zip</a></p>
+                </div>
+
+                <div class="card">
+                    <h2>💼 Коммерческое предложение</h2>
+                    <p><strong>Работать можем на постоянной основе</strong> — я предлагаю идеи и регулярно создаю контент, или точечно под конкретные задачи.</p>
+                    <p>Часть каталожной или рекламной съёмки можно реализовать <strong>без студии, фотографа и моделей</strong> — быстрее и с меньшими затратами.</p>
+                    <p>Готов выполнить тестовое по вашему ТЗ или самостоятельно подготовить концепцию специально для вашего бренда.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="creativityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Творчество</h2>
+                <button class="close-btn" onclick="closeProject('creativity')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-description">
+                    Мои творческие фото работы, созданные с помощью AI. Здесь собраны самые интересные и атмосферные снимки, которые показывают возможности современных инструментов для создания визуального контента.
+                </div>
+                <div class="gallery" id="creativityGallery"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="irnbyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>IRNBY</h2>
+                <button class="close-btn" onclick="closeProject('irnby')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-description">
+                    IRNBY обратились ко мне для того чтобы быстро и без сильных затрат создать съёмку своего товара. Результат — профессиональная предметная съёмка, созданная с использованием AI технологий. Без студии, без моделей, но с отличным результатом.
+                </div>
+                <div class="gallery" id="irnbyGallery"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="clipsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Клипы</h2>
+                <button class="close-btn" onclick="closeProject('clips')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-description">
+                    Мои любимые работы, в которых стиль совмещается с абсурдом. Видео файлы можно добавить сюда позже.
+                </div>
+                <div class="gallery">
+                    <div class="video-placeholder">
+                        🎬 Видео будут добавлены позже
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <button class="close-btn" onclick="closeLightbox()">&times;</button>
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <script>
+        const galleryData = {
+            creativity: [
+                'https://via.placeholder.com/400x300?text=Творчество+1',
+                'https://via.placeholder.com/400x300?text=Творчество+2',
+                'https://via.placeholder.com/400x300?text=Творчество+3',
+                'https://via.placeholder.com/400x300?text=Творчество+4',
+                'https://via.placeholder.com/400x300?text=Творчество+5',
+                'https://via.placeholder.com/400x300?text=Творчество+6',
+                'https://via.placeholder.com/400x300?text=Творчество+7',
+                'https://via.placeholder.com/400x300?text=Творчество+8',
+                'https://via.placeholder.com/400x300?text=Творчество+9',
+                'https://via.placeholder.com/400x300?text=Творчество+10',
+                'https://via.placeholder.com/400x300?text=Творчество+11',
+                'https://via.placeholder.com/400x300?text=Творчество+12',
+                'https://via.placeholder.com/400x300?text=Творчество+13',
+            ],
+            irnby: [
+                'https://via.placeholder.com/400x300?text=IRNBY+1',
+                'https://via.placeholder.com/400x300?text=IRNBY+2',
+                'https://via.placeholder.com/400x300?text=IRNBY+3',
+            ]
+        };
+
+        function openProject(project) {
+            const modal = document.getElementById(project + 'Modal');
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeProject(project) {
+            const modal = document.getElementById(project + 'Modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function openLightbox(src) {
+            document.getElementById('lightbox').style.display = 'block';
+            document.getElementById('lightboxImg').src = src;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function createGallery(containerId, images) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                images.forEach((img, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+                    item.innerHTML = `<img src="${img}" alt="Работа ${index + 1}" onclick="openLightbox(this.src)">`;
+                    container.appendChild(item);
+                });
+            }
+        }
+
+        function loadGalleries() {
+            createGallery('creativityGallery', galleryData.creativity);
+            createGallery('irnbyGallery', galleryData.irnby);
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        loadGalleries();
+    </script>
+</body>
+</html>
